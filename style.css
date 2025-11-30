@@ -1,0 +1,405 @@
+/* =========================================
+   1. RESET DAN GLOBAL STYLE
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+html {
+    /* Mencegah navbar menutupi judul saat klik menu */
+    scroll-padding-top: 100px;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    overflow-x: hidden;
+
+    /* --- FITUR BARU: BACKGROUND GRADIENT --- */
+    /* Gradasi dari Cream -> Oranye Lembut -> Merah Lembut */
+    background: linear-gradient(
+        to bottom, 
+        #c29973 0%,   /* Warna awal (dekat Home) */
+        #ee9f5a 40%,  /* Warna tengah (sekitar Menu) */
+        #e96e27 70%,  /* Warna tengah (sekitar Location) */
+        #b34205 100%  /* Warna akhir (sekitar Contact) */
+    );
+    /* Memastikan gradient mencakup seluruh tinggi halaman */
+    min-height: 100vh;
+}
+
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+
+/* =========================================
+   2. VARIABEL WARNA
+   ========================================= */
+:root {
+    --primary-color: #8b0404;
+    --secondary-color: #FFA500;
+    --text-color: #333;
+    /* Kita hapus --light-bg dan --section-bg-alt yang solid agar gradient terlihat */
+    --glass-bg: rgba(255, 255, 255, 0.85); /* Latar belakang semi-transparan untuk kartu */
+    --dark-bg: #333;
+}
+
+/* =========================================
+   3. NAVBAR (FIXED)
+   ========================================= */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 5%;
+    /* Gunakan background semi-transparan agar menyatu dengan gradient */
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px); /* Efek blur di belakang navbar */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+    border: 2px solid var(--primary-color);
+}
+
+.restaurant-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-color);
+}
+
+.nav-links a:hover {
+    color: var(--primary-color);
+}
+
+/* =========================================
+   4. FULLSCREEN SECTION SETUP
+   ========================================= */
+.full-slide {
+    min-height: 100vh; 
+    padding: 120px 5% 50px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    /* Background section dibuat transparan agar gradient body terlihat */
+    background-color: transparent; 
+}
+
+.section-title {
+    font-size: 2.2rem;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 0px rgba(255,255,255,0.5); /* Agar teks menonjol di atas gradient */
+}
+
+.sub-title {
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin: 20px 0;
+}
+
+/* =========================================
+   5. HERO SECTION (HOME)
+   ========================================= */
+.hero-section {
+    /* Hero tetap pakai gambar background sendiri agar kontras */
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('hero-bg.jpg') no-repeat center center/cover;
+    color: white;
+    justify-content: center;
+}
+
+.hero-content h1 { font-size: 3.5rem; margin-bottom: 10px; line-height: 1.2; }
+.hero-content h2 { font-size: 1.5rem; font-weight: 300; color: var(--secondary-color); margin-bottom: 20px; }
+.hero-content p { max-width: 700px; margin: 0 auto 30px; font-size: 1.1rem; }
+
+.cta-button {
+    background: var(--secondary-color); color: white; padding: 12px 30px;
+    border-radius: 30px; font-weight: 600; display: inline-block;
+    box-shadow: 0 4px 15px rgba(255, 165, 0, 0.4); /* Glow effect */
+}
+.cta-button:hover { background: #e69500; transform: translateY(-3px); }
+
+/* =========================================
+   6. MENU: SIGNATURE (ANDALAN)
+   ========================================= */
+.signature-wrapper { width: 100%; margin-bottom: 50px; }
+.signature-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; }
+
+.signature-card {
+    /* Gunakan variable glass-bg agar menyatu dengan gradient */
+    background: var(--glass-bg); 
+    width: 100%; max-width: 450px;
+    border-radius: 15px; overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border: 2px solid rgba(255, 255, 255, 0.5); /* Border halus */
+}
+.signature-card img { width: 100%; height: 300px; object-fit: cover; }
+.signature-card .card-content { padding: 20px; }
+.signature-card h3 { color: var(--primary-color); font-size: 1.5rem; margin-bottom: 10px; }
+.signature-card .price {
+    background: var(--primary-color); color: white; display: inline-block;
+    padding: 8px 20px; border-radius: 20px; margin-top: 15px; font-weight: bold;
+}
+
+/* =========================================
+   7. MENU: SLIDER (LAINNYA)
+   ========================================= */
+.slider-wrapper-section { 
+    width: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    overflow: hidden; /* Mencegah scrollbar horizontal muncul */
+}
+
+.slider-container { 
+    position: relative; 
+    width: 100%; /* Gunakan lebar penuh agar item samping bisa terlihat */
+    max-width: 800px; /* Lebar area pandang diperbesar */
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+/* Jendela Slider */
+.slider-window {
+    width: 100%; 
+    overflow: hidden; 
+    position: relative; 
+    /* Hapus background putih kotak, biarkan item slide yang punya background */
+    background: transparent !important; 
+    box-shadow: none;
+}
+
+/* Track */
+.menu-slider { 
+    display: flex; 
+    width: 100%;
+    /* Align items center penting agar efek scale rapi */
+    align-items: center;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); 
+    cursor: grab;
+}
+
+/* Item Slide */
+.slide-item {
+    /* Lebar item hanya 50% dari container, sisa ruang untuk item kanan/kiri */
+    flex: 0 0 50%; 
+    max-width: 50%;
+    
+    display: flex; 
+    flex-direction: column; 
+    text-align: center;
+    
+    /* Styling Kartu */
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    padding-bottom: 20px;
+    margin: 0 10px; /* Jarak antar kartu */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    
+    /* Efek Animasi (Default: Tidak Aktif) */
+    transform: scale(0.85); /* Kecilkan item yang tidak aktif */
+    opacity: 0.6; /* Buat agak transparan */
+    filter: blur(1px); /* Sedikit blur */
+    transition: all 0.5s ease;
+    z-index: 1;
+}
+
+/* Item Aktif (Yang ada di tengah) */
+.slide-item.active {
+    transform: scale(1.1); /* Perbesar item aktif */
+    opacity: 1; /* Jelas */
+    filter: blur(0);
+    z-index: 10; /* Tampil paling depan */
+    box-shadow: 0 15px 30px rgba(160, 0, 0, 0.2); /* Bayangan merah halus */
+    border: 2px solid var(--primary-color);
+}
+
+.slide-item img { 
+    width: 100%; 
+    height: 200px; 
+    object-fit: cover; 
+    display: block;
+    border-radius: 20px 20px 0 0;
+}
+
+.slide-item h3 { 
+    margin-top: 15px; 
+    color: var(--primary-color); 
+    font-size: 1.2rem; 
+}
+
+.slide-item .description { 
+    padding: 5px 10px; 
+    color: #666; 
+    font-size: 0.85rem; 
+    line-height: 1.4;
+}
+
+.slide-item .price {
+    background: var(--secondary-color); 
+    color: white; 
+    padding: 8px 20px;
+    border-radius: 50px; 
+    display: inline-block; 
+    margin: 10px auto 0; 
+    font-weight: bold; 
+    font-size: 1rem;
+}
+
+/* Tombol Navigasi */
+.slider-btn {
+    position: absolute; 
+    top: 50%; 
+    transform: translateY(-50%);
+    width: 45px; 
+    height: 45px; 
+    border-radius: 50%;
+    background: var(--primary-color); 
+    color: white; 
+    border: none;
+    cursor: pointer; 
+    z-index: 20; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.prev-btn { left: 10px; }
+.next-btn { right: 10px; }
+.slider-btn:hover { background: #800000; transform: translateY(-50%) scale(1.1); }
+.slider-dots { margin-top: 20px; }
+.dot {
+    display: inline-block; height: 12px; width: 12px; margin: 0 5px;
+    background-color: rgba(0,0,0,0.2); border-radius: 50%; cursor: pointer;
+}
+.dot.active { background-color: var(--primary-color); }
+
+
+/* =========================================
+   8. LOCATION SECTION
+   ========================================= */
+.location-section {
+    background-color: transparent; /* Transparan agar gradient tembus */
+}
+
+.location-grid {
+    display: flex; flex-wrap: wrap; gap: 30px; width: 100%; max-width: 1100px; margin-top: 30px;
+}
+
+.location-map, .location-photo-wrapper { flex: 1; min-width: 300px; }
+
+.location-details {
+    background: var(--glass-bg); /* Glass effect */
+    padding: 20px; border-radius: 10px; margin-bottom: 20px;
+    width: 100%; max-width: 600px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.location-photo { width: 100%; height: 350px; object-fit: cover; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.map-container { border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+/* =========================================
+   9. CONTACT & FOOTER
+   ========================================= */
+.contact-section { background-color: transparent; }
+
+.contact-info { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; }
+
+.contact-item {
+    background: var(--glass-bg); /* Glass effect */
+    padding: 30px; border-radius: 15px; width: 280px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.contact-item i { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 15px; }
+
+footer {
+    background-color: var(--dark-bg);
+    color: white; text-align: center; padding: 20px; font-size: 0.9rem;
+    margin-top: auto;
+}
+
+/* =========================================
+   10. RESPONSIVE (MOBILE)
+   ========================================= */
+@media (max-width: 768px) {
+    .navbar { flex-direction: column; padding: 10px; }
+    .nav-links { gap: 15px; margin-top: 10px; font-size: 0.9rem; }
+    .hero-content h1 { font-size: 2.5rem; }
+    .full-slide { padding-top: 140px; }
+    .slider-container { width: 80%; }
+    .prev-btn { left: -15px; } 
+    .next-btn { right: -15px; }
+}
+
+section, .menu-section, .location-section, .contact-section, .full-slide {
+    background-color: transparent !important;
+    background: transparent !important;
+}
+
+/* Pastikan kartu tetap memiliki background kaca (glass) agar tulisan terbaca */
+.signature-card, .slider-window, .location-details, .contact-item {
+    background: rgba(255, 255, 255, 0.85) !important; /* Putih transparan */
+    backdrop-filter: blur(5px);
+}
+/* --- PERBAIKAN: KHUSUS HERO SECTION --- */
+/* Kita kembalikan gambar background khusus untuk Home agar tidak transparan */
+#home.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('hero-bg.jpg') no-repeat center center/cover !important;
+    position: relative;
+    z-index: 1;
+}
+/* --- PERBAIKAN FINAL VISUAL --- */
+
+/* 1. Hapus kotak putih di belakang slider agar menyatu dengan background oranye */
+.slider-container, 
+.slider-window {
+    background: transparent !important; /* Paksa transparan */
+    box-shadow: none !important; /* Hapus bayangan kotak pembungkus */
+    overflow: visible !important; /* Biarkan kartu yang di pinggir terlihat keluar dikit */
+}
+
+/* 2. Pastikan Hero Image di Home TETAP MUNCUL (Tidak ketimpa warna oranye) */
+#home.hero-section {
+    /* Pastikan URL gambarnya benar */
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('hero-bg.jpg') no-repeat center center/cover !important;
+}
+
+/* 3. Atur posisi tombol agar lebih pas */
+.prev-btn { left: -10px !important; }
+.next-btn { right: -10px !important; }
