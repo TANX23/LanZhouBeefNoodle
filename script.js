@@ -1,95 +1,124 @@
-// Mengambil elemen slider
-const sliderWindow = document.querySelector('.slider-window');
-const slider = document.querySelector('.menu-slider');
-const slides = document.querySelectorAll('.menu-slider .slide-item');
-const prevBtn = document.querySelector('.prev-btn');
-const nextBtn = document.querySelector('.next-btn');
-const dotsContainer = document.querySelector('.slider-dots');
+document.addEventListener("DOMContentLoaded", () => {
+    
+    // --- SAFEGUARD: ANTI BLACK SCREEN ---
+    // Loader hilang otomatis setelah 3.5 detik (Backup jika GSAP gagal)
+    setTimeout(() => {
+        const loader = document.getElementById('loader');
+        if(loader && loader.style.display !== 'none') {
+            loader.style.opacity = '0';
+            loader.style.pointerEvents = 'none';
+        }
+    }, 3500);
 
-let currentSlide = 0;
-const totalSlides = slides.length;
+    // 1. INIT SMOOTH SCROLL (Lenis)
+    if (typeof Lenis !== 'undefined') {
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            smooth: true,
+            smoothTouch: false,
+        });
 
-function goToSlide(index) {
-    // Logika Loop (Muter balik)
-    if (index < 0) {
-        currentSlide = totalSlides - 1; 
-    } else if (index >= totalSlides) {
-        currentSlide = 0; 
-    } else {
-        currentSlide = index;
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
     }
 
-    // 1. Ambil lebar jendela pembungkus dan lebar satu kartu
-    const windowWidth = sliderWindow.offsetWidth;
-    const slideWidth = slides[0].offsetWidth;
-    
-    // 2. Hitung posisi tengah
-    // Kita ingin tengah kartu berada di tengah jendela
-    // Rumus: (Lebar Jendela / 2) - (Lebar Kartu / 2) - (Urutan Kartu * Lebar Kartu)
-    
-    // Kita perlu memperhitungkan margin antar kartu (misal 20px total kiri kanan)
-    // Cara paling aman pakai offsetLeft
-    const currentSlideEl = slides[currentSlide];
-    
-    // Hitung posisi agar elemen aktif ada di tengah
-    const centerPosition = (windowWidth / 2) - (slideWidth / 2);
-    const slidePosition = currentSlideEl.offsetLeft;
-    
-    // Geser slider
-    const moveAmount = centerPosition - slidePosition;
-    slider.style.transform = `translateX(${moveAmount}px)`;
+    // 2. GSAP ANIMATIONS
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
 
-    // 3. Update Class Active untuk efek visual (Scale & Opacity)
-    slides.forEach((slide, i) => {
-        if (i === currentSlide) {
-            slide.classList.add('active');
-        } else {
-            slide.classList.remove('active');
-        }
-    });
+        // A. LOADER TIMELINE (Tipografi Reveal)
+        const loaderTl = gsap.timeline();
+        loaderTl
+            // Animasi Huruf Muncul Satu per Satu
+            .to(".loader-char", { 
+                y: 0, 
+                opacity: 1, 
+                stagger: 0.1, // Jeda antar huruf
+                duration: 1, 
+                ease: "power4.out" 
+            })
+            // Animasi Garis Merah
+            .to(".loader-line", { 
+                width: "150px", 
+                duration: 0.8, 
+                ease: "power2.inOut" 
+            }, "-=0.5")
+            // Animasi Subtitle
+            .to(".loader-sub", { 
+                opacity: 1, 
+                y: 0,
+                duration: 0.8 
+            }, "-=0.5")
+            // Loader Slide Up (Membuka Layar)
+            .to("#loader", { 
+                yPercent: -100, 
+                duration: 1.2, 
+                ease: "power4.inOut", 
+                delay: 0.5,
+                onComplete: () => { 
+                    document.getElementById('loader').style.display = 'none'; 
+                } 
+            })
+            // Animasi Hero Section (Teks Utama)
+            .to(".hero-anim", { 
+                opacity: 1, 
+                y: 0, 
+                stagger: 0.2, 
+                duration: 1, 
+                ease: "power3.out" 
+            }, "-=0.8");
 
-    updateDots();
-}
+        // B. PARALLAX HERO
+        gsap.to(".hero-bg", {
+            scrollTrigger: {
+                trigger: "#home",
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            },
+            yPercent: 30,
+            ease: "none"
+        });
 
-function updateDots() {
-    dotsContainer.innerHTML = ''; 
-    slides.forEach((_, index) => {
-        const dot = document.createElement('span');
-        dot.classList.add('dot');
-        if (index === currentSlide) dot.classList.add('active');
-        dot.addEventListener('click', () => goToSlide(index));
-        dotsContainer.appendChild(dot);
-    });
-}
+        // C. IMAGE REVEAL
+        const revealWrappers = document.querySelectorAll('.reveal-wrapper');
+        revealWrappers.forEach(wrap => {
+            const img = wrap.querySelector('.reveal-img');
+            gsap.to(img, {
+                scrollTrigger: {
+                    trigger: wrap,
+                    start: "top 85%",
+                    end: "bottom top",
+                    scrub: 1,
+                },
+                scale: 1,
+                ease: "none"
+            });
+        });
 
-// Event Listeners
-if(prevBtn && nextBtn) {
-    prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
-    nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
-}
+        // D. MARQUEE
+        gsap.to(".marquee-container", {
+            xPercent: -50,
+            repeat: -1,
+            duration: 20,
+            ease: "linear"
+        });
 
-// Jalankan saat load
-// Init
-document.addEventListener('DOMContentLoaded', () => {
-    if(slides.length > 0) {
-        // GANTI 0 JADI 1 DI SINI
-        // Agar mulai dari tengah, jadi kiri & kanan langsung ada isinya
-        setTimeout(() => goToSlide(1), 100); 
+        // E. NAVBAR SCROLLED EFFECT
+        ScrollTrigger.create({
+            start: 'top -50',
+            end: 99999,
+            toggleClass: {className: 'bg-brand-dark/90', targets: '#navbar'}
+        });
+        ScrollTrigger.create({
+            start: 'top -50',
+            end: 99999,
+            toggleClass: {className: 'backdrop-blur-md', targets: '#navbar'}
+        });
     }
-});
-
-// Update posisi saat layar di-resize (agar tetap di tengah)
-window.addEventListener('resize', () => {
-    goToSlide(currentSlide);
-});
-
-// Scroll Halus Navbar
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if(target){
-            target.scrollIntoView({ behavior: 'smooth' });
-        }
-    });
 });
